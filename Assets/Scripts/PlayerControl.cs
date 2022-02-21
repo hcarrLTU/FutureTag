@@ -28,6 +28,7 @@ public class PlayerControl : MonoBehaviour
     private float lungeCooldown = 0;
     //private Vector3 lungePoint;
     private bool canMove;
+    private bool isRunning;
     public float stunCooldown = 0;
     private float verticalSpeed;
     private float horizontalSpeed;
@@ -80,14 +81,20 @@ public class PlayerControl : MonoBehaviour
                 {
                     horizontalSpeed += runSpeed * Time.deltaTime;
                 }
-                if ((verticalSpeed != 0) || (horizontalSpeed != 0))
-                {
-                    this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
-                }
                 if ((verticalSpeed != 0) && (horizontalSpeed != 0)) //makes diagonal speed equal to runSpeed
                 {
+                    isRunning = true;
                     verticalSpeed = verticalSpeed * (1 / Mathf.Sqrt(2));
                     horizontalSpeed = horizontalSpeed * (1 / Mathf.Sqrt(2));
+                }
+                else if ((verticalSpeed != 0) || (horizontalSpeed != 0))
+                {
+                    isRunning = true;
+                    this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
+                }
+                else
+                {
+                    isRunning = false;
                 }
             }
             if ((Input.GetKey(lungeKey)) && (lungeCooldown == 0) && (hasBall == false))
