@@ -1061,7 +1061,7 @@ GameObject:
   - component: {fileID: 704780777}
   - component: {fileID: 704780776}
   m_Layer: 0
-  m_Name: Drastic Angle View (
+  m_Name: Drastic Angle View (space at top)
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1314,7 +1314,7 @@ GameObject:
   - component: {fileID: 768648260}
   - component: {fileID: 768648259}
   m_Layer: 0
-  m_Name: Drastic Angle View
+  m_Name: Drastic Angle View (old, stadium centered)
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
