@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public KeyCode upKey;
     public KeyCode downKey;
@@ -57,8 +57,8 @@ public class PlayerControl : MonoBehaviour
             Player2Points.text = "Points: " + (pointsGained).ToString() + "/" + pointsTotal + "\nLunge cooldown: " + lungeCooldown;
         }
         Vector3 markerPosition = Camera.WorldToViewportPoint(this.transform.position);
-        markerPosition.x = markerPosition.x * 750 - 375;
-        markerPosition.y = markerPosition.y * 500 - 250;
+        markerPosition.x = markerPosition.x * 500;
+        markerPosition.y = markerPosition.y * 500;
         //markerPosition.z = 0;
         PlayerMarker.GetComponent<RectTransform>().localPosition = markerPosition;
         Vector3 newPosition = this.transform.position;
@@ -166,7 +166,7 @@ public class PlayerControl : MonoBehaviour
         while (t < lungeDuration)
         {
             t += Time.deltaTime;
-            this.transform.position = Vector3.Lerp(startPosition, targetPosition, t/lungeDuration);
+            this.transform.position = Vector3.Lerp(startPosition, targetPosition, t / lungeDuration);
             Debug.Log("Time elapsed: " + t);
             yield return null;
         }
@@ -178,17 +178,17 @@ public class PlayerControl : MonoBehaviour
     {
         if ((other.gameObject.tag == "Ball"))// && (hasBall == false))
         {
-                hasBall = true;
-                Debug.Log(this.name + " grabbed stationary ball");
+            hasBall = true;
+            Debug.Log(this.name + " grabbed stationary ball");
         }
         else if ((other.gameObject.tag == "Player") && (hasBall == false))
         {
             //if (isLunging == true)
             //{
-                Ball ballScript = GameBall.GetComponent<Ball>();
-                ballScript.ballTransferring = true;
-                //other.gameObject.stunCooldown = 1;
-                Debug.Log(this.name + " grabbed ball from other player");
+            Ball ballScript = GameBall.GetComponent<Ball>();
+            ballScript.ballTransferring = true;
+            //other.gameObject.stunCooldown = 1;
+            Debug.Log(this.name + " grabbed ball from other player");
             //}
         }
         //CameraScript Shake = Camera.GetComponent<CameraShake>();

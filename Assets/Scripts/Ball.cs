@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
     public GameObject Player2;
     public GameObject Player3;
     public GameObject Player4;
+    public Camera Camera;
     public bool ballTransferring;
 
     Collider ballCollider;
@@ -26,6 +27,7 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CameraShake cameraScript = Camera.GetComponent<CameraShake>();
         PlayerControl player1Script = Player1.GetComponent<PlayerControl>();
         PlayerControl player2Script = Player2.GetComponent<PlayerControl>();
         //PlayerControl player3Script = Player3.GetComponent<PlayerControl>();
@@ -39,6 +41,7 @@ public class Ball : MonoBehaviour
             Debug.Log("Ball transferred...");
             if ((player1Script.hasBall == true) && (player2Script.hasBall == false))
             {
+                cameraScript.shaking = true;
                 player2Script.hasBall = true;
                 Debug.Log("...to player 2");
                 player1Script.hasBall = false;
@@ -46,6 +49,7 @@ public class Ball : MonoBehaviour
             }
             else if ((player1Script.hasBall == false) && (player2Script.hasBall == true))
             {
+                cameraScript.shaking = true;
                 player1Script.hasBall = true;
                 Debug.Log("...to player 1");
                 player2Script.hasBall = false;
