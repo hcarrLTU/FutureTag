@@ -4,3 +4,4 @@
 2/4/22_Week 4: Added Blockouts for Stadium and Small Player Test. Basic run animations were implemented too!
 2/11/22_Week 5: Tall Player Test implemented (need to tweak animation, legs are weird). Test texture for Small Player applied. *New angled camera view, with top-down mini camera view!*
 2/18/22_Week 6: Test Stage Texture! Readjusted camera (gameplay scooched down). Temp UI placement set!
+2/25/22_Week_7: Player markers that display above walls! Score UI and Mini-cam moved to perpendicular canvas! Particle effects on Ball (screen shake with ball handoff). Art-style test for ground texture!
