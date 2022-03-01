@@ -1,3 +1,5 @@
+// THIS SCRIPT IS OBSOLETE I COPIED THE OTHER ONE OVER BEFORE REALIZING I DIDN'T NEED TO
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -22,15 +22,16 @@ public class PlayerControl : MonoBehaviour
     public Camera Camera;
     public GameObject PlayerMarker;
     public GameObject GameBall;
+    Animator animator;
 
     private float pointsTotal = 20; // point cap for win condition
     private float runSpeed = 10; // just for testing
-    private float lungeSpeed = 15; // same
-    private float lungeDuration = 0.015f;
+    private float lungeSpeed = 10; // same
+    private float lungeDuration = 1f;
     private float lungeCooldown = 0;
     //private Vector3 lungePoint;
     private bool canMove;
-    private bool isRunning;
+    public bool isRunning;
     public float stunCooldown = 0;
     private float verticalSpeed;
     private float horizontalSpeed;
@@ -43,6 +44,7 @@ public class PlayerControl : MonoBehaviour
         canMove = true;
         pointsGained = 0;
         Ball ballScript = GameBall.GetComponent<Ball>();
+        animator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -56,11 +58,15 @@ public class PlayerControl : MonoBehaviour
         {
             Player2Points.text = "Points: " + (pointsGained).ToString() + "/" + pointsTotal + "\nLunge cooldown: " + lungeCooldown;
         }
-        Vector3 markerPosition = Camera.WorldToViewportPoint(this.transform.position);
-        markerPosition.x = markerPosition.x * 750 - 375;
-        markerPosition.y = markerPosition.y * 500 - 250;
+        Vector3 markerPosition = Camera.WorldToScreenPoint(this.transform.position);
+        //Debug.Log(markerPosition.ToString());
+        //markerPosition.x = markerPosition.x * 750 - 375;
+        //markerPosition.y = markerPosition.y * 500 - 250;
+        //markerPosition.x = markerPosition.x / Screen.width - Screen.width / 2;
+        //markerPosition.y = markerPosition.y / Screen.height - Screen.height / 2;
         //markerPosition.z = 0;
-        PlayerMarker.GetComponent<RectTransform>().localPosition = markerPosition;
+        //PlayerMarker.GetComponent<RectTransform>().localPosition = markerPosition;
+        PlayerMarker.GetComponent<RectTransform>().anchoredPosition = markerPosition;
         Vector3 newPosition = this.transform.position;
         verticalSpeed = 0;
         horizontalSpeed = 0;
@@ -90,18 +96,18 @@ public class PlayerControl : MonoBehaviour
                 }
                 if ((verticalSpeed != 0) && (horizontalSpeed != 0)) //makes diagonal speed equal to runSpeed
                 {
-                    isRunning = true;
+                    animator.SetBool("isRunning", false);
                     verticalSpeed = verticalSpeed * (1 / Mathf.Sqrt(2));
                     horizontalSpeed = horizontalSpeed * (1 / Mathf.Sqrt(2));
                 }
                 else if ((verticalSpeed != 0) || (horizontalSpeed != 0))
                 {
-                    isRunning = true;
+                    animator.SetBool("isRunning", false);
                     this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
                 }
                 else
                 {
-                    isRunning = false;
+                    animator.SetBool("isRunning", true);
                 }
             }
             if ((Input.GetKey(lungeKey)) && (lungeCooldown == 0) && (hasBall == false))
