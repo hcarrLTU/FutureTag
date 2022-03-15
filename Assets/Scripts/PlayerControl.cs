@@ -23,11 +23,14 @@ public class PlayerControl : MonoBehaviour
     public GameObject PlayerMarker;
     public GameObject GameBall;
     Animator animator;
+    public static string winner;
+
+    public ParticleSystem system;
 
     private float pointsTotal = 20; // point cap for win condition
     private float runSpeed = 10; // just for testing
-    private float lungeSpeed = 10; // same
-    private float lungeDuration = 1f;
+    private float lungeSpeed = 10f; // same
+    private float lungeDuration = 5f;
     private float lungeCooldown = 0;
     //private Vector3 lungePoint;
     private bool canMove;
@@ -45,6 +48,7 @@ public class PlayerControl : MonoBehaviour
         pointsGained = 0;
         Ball ballScript = GameBall.GetComponent<Ball>();
         animator = gameObject.GetComponent<Animator>();
+        ParticleSystem ps = GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -153,6 +157,7 @@ public class PlayerControl : MonoBehaviour
             {
                 SceneManager.LoadScene("WinScreen");
                 Debug.Log(this.name + " wins");
+                WinText.winner = this.name;
                 //SceneManager.LoadScene("SampleScene");
             }
         }
@@ -165,14 +170,17 @@ public class PlayerControl : MonoBehaviour
         float t = 0;
         Vector3 startPosition = transform.position;
 
+        //var emitParams = new ParticleSystem.EmitParams();
+        //system.Emit(emitParams, 1);
+
         verticalSpeed = -this.transform.forward.x;
         horizontalSpeed = this.transform.forward.z;
-        Vector3 targetPosition = this.transform.position + (new Vector3(horizontalSpeed, 0, verticalSpeed) * lungeSpeed);
+        Vector3 targetPosition = this.transform.position + (new Vector3(horizontalSpeed, 0, verticalSpeed) * lungeDuration * lungeSpeed); //use rate/speed
 
         while (t < lungeDuration)
         {
             t += Time.deltaTime;
-            this.transform.position = Vector3.Lerp(startPosition, targetPosition, t/lungeDuration);
+            this.transform.position = Vector3.Lerp(startPosition, targetPosition, 1/lungeSpeed); //replace duration with rate/speed
             Debug.Log("Time elapsed: " + t);
             yield return null;
         }
