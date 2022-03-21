@@ -11,6 +11,8 @@ public class Ball : MonoBehaviour
     public Camera Camera;
     public bool ballTransferring;
 
+    public ParticleSystem ballParticleSystem;
+
     Collider ballCollider;
 
     // Start is called before the first frame update
@@ -38,7 +40,8 @@ public class Ball : MonoBehaviour
 
         if (ballTransferring == true)
         {
-            Debug.Log("Ball transferred...");
+            ballParticleSystem.Play();
+
             if ((player1Script.hasBall == true) && (player2Script.hasBall == false))
             {
                 cameraScript.shaking = true;

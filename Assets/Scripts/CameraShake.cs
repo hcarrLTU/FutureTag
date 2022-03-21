@@ -10,7 +10,7 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         shaking = false;
-}
+    }
 
     // Update is called once per frame
     void Update()
@@ -24,7 +24,7 @@ public class CameraShake : MonoBehaviour
 
     public IEnumerator Shake(float duration, float magnitude)
     {
-        Debug.Log("Shaking");
+        Debug.Log("Camera shaking");
         Vector3 originalPosition = transform.localPosition;
         float elapsed = 0f;
 

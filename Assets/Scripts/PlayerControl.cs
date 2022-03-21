@@ -25,12 +25,12 @@ public class PlayerControl : MonoBehaviour
     Animator animator;
     public static string winner;
 
-    public ParticleSystem system;
+    public ParticleSystem lungeParticleSystem;
 
     private float pointsTotal = 20; // point cap for win condition
     private float runSpeed = 10; // just for testing
-    private float lungeSpeed = 10f; // same
-    private float lungeDuration = 5f;
+    private float lungeSpeed = 7.5f; // same
+    private float lungeDuration = 1f;
     private float lungeCooldown = 0;
     //private Vector3 lungePoint;
     private bool canMove;
@@ -71,6 +71,20 @@ public class PlayerControl : MonoBehaviour
         //markerPosition.z = 0;
         //PlayerMarker.GetComponent<RectTransform>().localPosition = markerPosition;
         PlayerMarker.GetComponent<RectTransform>().anchoredPosition = markerPosition;
+
+        RaycastHit hit;
+        Physics.SphereCast(Camera.transform.position, 10, this.transform.position - Camera.transform.position, out hit, 100);
+        Debug.Log("SphereCast hit: " + hit.point);
+        Debug.Log("Player at: " + this.transform.position);
+        if (hit.transform == this.transform)
+        {
+            PlayerMarker.SetActive(false);
+        }
+        else
+        {
+            PlayerMarker.SetActive(true);
+        }
+
         Vector3 newPosition = this.transform.position;
         verticalSpeed = 0;
         horizontalSpeed = 0;
@@ -103,6 +117,7 @@ public class PlayerControl : MonoBehaviour
                     animator.SetBool("isRunning", false);
                     verticalSpeed = verticalSpeed * (1 / Mathf.Sqrt(2));
                     horizontalSpeed = horizontalSpeed * (1 / Mathf.Sqrt(2));
+                    this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
                 }
                 else if ((verticalSpeed != 0) || (horizontalSpeed != 0))
                 {
@@ -132,7 +147,8 @@ public class PlayerControl : MonoBehaviour
             if (stunCooldown > 0)
             {
                 canMove = false;
-                stunCooldown -= Time.deltaTime;
+                stunCooldown -= 1;
+                //StartCoroutine(Shake(0.01f, 0.1f));
                 Debug.Log("Stun cooldown: " + stunCooldown);
             }
             else if (stunCooldown < 0)
@@ -170,21 +186,30 @@ public class PlayerControl : MonoBehaviour
         float t = 0;
         Vector3 startPosition = transform.position;
 
-        //var emitParams = new ParticleSystem.EmitParams();
-        //system.Emit(emitParams, 1);
+        //particle stuff goes here
+        lungeParticleSystem.Play();
 
         verticalSpeed = -this.transform.forward.x;
         horizontalSpeed = this.transform.forward.z;
-        Vector3 targetPosition = this.transform.position + (new Vector3(horizontalSpeed, 0, verticalSpeed) * lungeDuration * lungeSpeed); //use rate/speed
+        Vector3 targetPosition = this.transform.position + (new Vector3(horizontalSpeed, 0, verticalSpeed) * lungeDuration * lungeSpeed);
 
         while (t < lungeDuration)
         {
             t += Time.deltaTime;
-            this.transform.position = Vector3.Lerp(startPosition, targetPosition, 1/lungeSpeed); //replace duration with rate/speed
+            //this.transform.position = Vector3.Lerp(startPosition, targetPosition, 1/lungeSpeed); //old teleport
+            this.transform.position = Vector3.Lerp(startPosition, targetPosition, (t*lungeSpeed)/2);
             Debug.Log("Time elapsed: " + t);
+            if (this.transform.position == targetPosition)
+            {
+                Debug.Log("Reached target position " + t);
+                isLunging = false;
+                canMove = true;
+                yield break;
+            }
             yield return null;
         }
         isLunging = false;
+        Debug.Log("Test");
         //this.transform.position = targetPosition;
     }
 
@@ -197,15 +222,35 @@ public class PlayerControl : MonoBehaviour
         }
         else if ((other.gameObject.tag == "Player") && (hasBall == false))
         {
-            //if (isLunging == true)
-            //{
+            if (isLunging == true)
+            {
                 Ball ballScript = GameBall.GetComponent<Ball>();
                 ballScript.ballTransferring = true;
-                //other.gameObject.stunCooldown = 1;
                 Debug.Log(this.name + " grabbed ball from other player");
-            //}
+            }
+        }
+        else if ((other.gameObject.tag == "Player") & (hasBall == true)){
+            //stunCooldown = 20;
         }
         //CameraScript Shake = Camera.GetComponent<CameraShake>();
+    }
+
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+        Debug.Log("Player shaking");
+        Vector3 originalPosition = transform.localPosition;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            //float y = Random.Range(-1f, 1f) * magnitude;
+
+            transform.position = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
+            elapsed += Time.deltaTime;
+            yield return 0;
+        }
+        transform.position = originalPosition;
     }
 
     //void OnTriggerEnter(Collider other)
