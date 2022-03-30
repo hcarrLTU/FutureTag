@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 247834960}
   - component: {fileID: 247834959}
   - component: {fileID: 247834962}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TestWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,7 +477,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247834957}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b07798351bc51f143b7103a5660e934a, type: 3}
   m_Name: 
@@ -497,8 +497,7 @@ MonoBehaviour:
   PlayerMarker: {fileID: 0}
   GameBall: {fileID: 0}
   lungeParticleSystem: {fileID: 0}
-  isRunning: 0
-  stunCooldown: 0
+  stunned: 0
 --- !u!1 &249592294 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ba0289d495ed5e3409061a659447212b, type: 3}
@@ -1128,7 +1127,7 @@ GameObject:
   - component: {fileID: 508483599}
   - component: {fileID: 508483598}
   - component: {fileID: 508483597}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BottomLeftWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1169,7 +1168,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508483595}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2325,7 +2324,7 @@ GameObject:
   - component: {fileID: 903366653}
   - component: {fileID: 903366652}
   - component: {fileID: 903366651}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TopRightWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2366,7 +2365,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 903366649}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2717,7 +2716,7 @@ GameObject:
   - component: {fileID: 934746506}
   - component: {fileID: 934746505}
   - component: {fileID: 934746504}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LeftWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2758,7 +2757,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934746502}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3027,8 +3026,7 @@ MonoBehaviour:
   PlayerMarker: {fileID: 1413760149}
   GameBall: {fileID: 299698644}
   lungeParticleSystem: {fileID: 1176445163}
-  isRunning: 0
-  stunCooldown: 0
+  stunned: 0
 --- !u!4 &951720731
 Transform:
   m_ObjectHideFlags: 0
@@ -8518,7 +8516,7 @@ BoxCollider:
   m_GameObject: {fileID: 1218506398}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -8650,8 +8648,7 @@ MonoBehaviour:
   PlayerMarker: {fileID: 1466912055}
   GameBall: {fileID: 299698644}
   lungeParticleSystem: {fileID: 2080434741}
-  isRunning: 0
-  stunCooldown: 0
+  stunned: 0
 --- !u!65 &1245967679
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8890,7 +8887,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 1920, y: 1080}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1413760151
 MonoBehaviour:
@@ -9044,7 +9041,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 1920, y: 1080}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1466912057
 MonoBehaviour:
@@ -9096,7 +9093,7 @@ GameObject:
   - component: {fileID: 1511088713}
   - component: {fileID: 1511088712}
   - component: {fileID: 1511088711}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BottomRightWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9137,7 +9134,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1511088709}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9400,7 +9397,7 @@ MeshCollider:
   m_GameObject: {fileID: 1738922840}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -9492,7 +9489,7 @@ GameObject:
   - component: {fileID: 1823884129}
   - component: {fileID: 1823884128}
   - component: {fileID: 1823884127}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RightWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9533,7 +9530,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823884125}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9588,7 +9585,7 @@ GameObject:
   - component: {fileID: 1833021281}
   - component: {fileID: 1833021280}
   - component: {fileID: 1833021279}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TopWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9629,7 +9626,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833021277}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9948,7 +9945,7 @@ GameObject:
   - component: {fileID: 1945204572}
   - component: {fileID: 1945204571}
   - component: {fileID: 1945204570}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TopLeftWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9989,7 +9986,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1945204568}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10190,7 +10187,7 @@ GameObject:
   - component: {fileID: 2082079569}
   - component: {fileID: 2082079568}
   - component: {fileID: 2082079567}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BottomWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10231,7 +10228,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082079565}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10625,8 +10622,7 @@ MonoBehaviour:
   PlayerMarker: {fileID: 1413760149}
   GameBall: {fileID: 299698644}
   lungeParticleSystem: {fileID: 0}
-  isRunning: 0
-  stunCooldown: 0
+  stunned: 0
 --- !u!95 &2311336135843250777
 Animator:
   serializedVersion: 3
