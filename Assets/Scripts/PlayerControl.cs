@@ -34,17 +34,12 @@ public class PlayerControl : MonoBehaviour
     private float lungeCooldown = 0;
     //private Vector3 lungePoint;
     private bool canMove;
-    //public bool isRunning;
-    //public float stunCooldown = 0;
-    public bool stunned;
+    public bool isRunning;
+    public float stunCooldown = 0;
     private float verticalSpeed;
     private float horizontalSpeed;
     private float verticalInput;
     private float horizontalInput;
-
-    float movementRaycastLength = 1;
-
-    Collider playerCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -54,9 +49,6 @@ public class PlayerControl : MonoBehaviour
         Ball ballScript = GameBall.GetComponent<Ball>();
         animator = gameObject.GetComponent<Animator>();
         ParticleSystem ps = GetComponent<ParticleSystem>();
-        //playerCollider = GetComponent<Collider>;
-
-        LayerMask MarkerMask = LayerMask.GetMask("InsideWalls");
     }
 
     // Update is called once per frame
@@ -81,21 +73,17 @@ public class PlayerControl : MonoBehaviour
         PlayerMarker.GetComponent<RectTransform>().anchoredPosition = markerPosition;
 
         RaycastHit hit;
-        Physics.SphereCast(Camera.transform.position, 0.25f, (this.transform.position - Camera.transform.position).normalized, out hit, (this.transform.position - Camera.transform.position).magnitude, 1 << 6);
-        //Debug.Log("SphereCast hit: " + hit.point);
-        //Debug.Log("Player at: " + this.transform.position);
-
-        if (hit.transform)//(hit.transform == this.transform)
-        {
-            PlayerMarker.SetActive(true);
-        }
-        else
+        Physics.SphereCast(Camera.transform.position, 10, this.transform.position - Camera.transform.position, out hit, 100);
+        Debug.Log("SphereCast hit: " + hit.point);
+        Debug.Log("Player at: " + this.transform.position);
+        if (hit.transform == this.transform)
         {
             PlayerMarker.SetActive(false);
         }
-
-        Debug.DrawLine(Camera.transform.position, hit.point);
-        Debug.DrawLine(this.transform.position, this.transform.forward, Color.white, 10);
+        else
+        {
+            PlayerMarker.SetActive(true);
+        }
 
         Vector3 newPosition = this.transform.position;
         verticalSpeed = 0;
@@ -111,49 +99,29 @@ public class PlayerControl : MonoBehaviour
                 if (Input.GetKey(upKey)) // move up
                 {
                     verticalSpeed += runSpeed * Time.deltaTime;
-                    if (Physics.Raycast(this.transform.position, new Vector3(0, 0, 1), movementRaycastLength))//, 1 << 6 | 7))
-                    {
-                        verticalSpeed = 0;
-                    }
                 }
                 if (Input.GetKey(downKey)) // move down
                 {
                     verticalSpeed -= runSpeed * Time.deltaTime;
-                    if (Physics.Raycast(this.transform.position, new Vector3(0, 0, -1), movementRaycastLength))//, 1 << 6 | 7))
-                    {
-                        verticalSpeed = 0;
-                    }
                 }
                 if (Input.GetKey(leftKey)) // move left
                 {
                     horizontalSpeed -= runSpeed * Time.deltaTime;
-                    if (Physics.Raycast(this.transform.position, new Vector3(-1, 0, 0), movementRaycastLength))//, 1 << 6 | 7))
-                    {
-                        horizontalSpeed = 0;
-                    }
                 }
-                if ((Input.GetKey(rightKey))) // move right
+                if (Input.GetKey(rightKey)) // move right
                 {
                     horizontalSpeed += runSpeed * Time.deltaTime;
-                    if (Physics.Raycast(this.transform.position, new Vector3(1, 0, 0), movementRaycastLength))//, 1 << 6 | 7))
-                    {
-                        horizontalSpeed = 0;
-                    }
                 }
                 if ((verticalSpeed != 0) && (horizontalSpeed != 0)) //makes diagonal speed equal to runSpeed
                 {
                     animator.SetBool("isRunning", false);
                     verticalSpeed = verticalSpeed * (1 / Mathf.Sqrt(2));
                     horizontalSpeed = horizontalSpeed * (1 / Mathf.Sqrt(2));
-                    Debug.Log("Vertical speed: " + verticalSpeed);
-                    Debug.Log("Horizontal speed: " + horizontalSpeed);
                     this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
                 }
                 else if ((verticalSpeed != 0) || (horizontalSpeed != 0))
                 {
                     animator.SetBool("isRunning", false);
-                    Debug.Log("Vertical speed: " + verticalSpeed);
-                    Debug.Log("Horizontal speed: " + horizontalSpeed);
                     this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
                 }
                 else
@@ -161,36 +129,33 @@ public class PlayerControl : MonoBehaviour
                     animator.SetBool("isRunning", true);
                 }
             }
-            if ((Input.GetKey(lungeKey)) && (lungeCooldown == 0) && (hasBall == false) && (!Physics.SphereCast(this.transform.position, 1, this.transform.forward, out hit, 2)))
+            if ((Input.GetKey(lungeKey)) && (lungeCooldown == 0) && (hasBall == false))
             {
-                if (!Physics.Raycast(this.transform.position, this.transform.forward, 6*movementRaycastLength))//, 1 << 6 | 7))
-                {
-                    StartCoroutine(Lunge());
-                    canMove = true;
-                    lungeCooldown = 3;
-                }
+                StartCoroutine(Lunge());
+                canMove = true;
+                lungeCooldown = 3;
             }
             if (lungeCooldown > 0)
             {
                 lungeCooldown -= Time.deltaTime;
-                //Debug.Log("Lunge cooldown: " + lungeCooldown);
+                Debug.Log("Lunge cooldown: " + lungeCooldown);
             }
             else if (lungeCooldown < 0)
             {
                 lungeCooldown = 0;
             }
-            if (stunned == true)
+            if (stunCooldown > 0)
             {
                 canMove = false;
-                StartCoroutine(Shake(1f, 0.5f));
-                //Debug.Log("Stun cooldown: " + stunCooldown);
+                stunCooldown -= 1;
+                //StartCoroutine(Shake(0.01f, 0.1f));
+                Debug.Log("Stun cooldown: " + stunCooldown);
             }
-            //else if (stunCooldown <= 0)
-            //{
-            //    stunCooldown = 0;
-            //    canMove = true;
-            //    Debug.Log("Stun over, player can move");
-            //}
+            else if (stunCooldown < 0)
+            {
+                stunCooldown = 0;
+                canMove = true;
+            }
         }
         newPosition.x += horizontalSpeed;
         newPosition.z += verticalSpeed;
@@ -231,13 +196,12 @@ public class PlayerControl : MonoBehaviour
         while (t < lungeDuration)
         {
             t += Time.deltaTime;
-            //raycast in front of the player to see if theres room
             //this.transform.position = Vector3.Lerp(startPosition, targetPosition, 1/lungeSpeed); //old teleport
             this.transform.position = Vector3.Lerp(startPosition, targetPosition, (t*lungeSpeed)/2);
-            //Debug.Log("Time elapsed in lunge: " + t);
+            Debug.Log("Time elapsed: " + t);
             if (this.transform.position == targetPosition)
             {
-                //Debug.Log("Reached target position " + t);
+                Debug.Log("Reached target position " + t);
                 isLunging = false;
                 canMove = true;
                 yield break;
@@ -254,7 +218,7 @@ public class PlayerControl : MonoBehaviour
         if ((other.gameObject.tag == "Ball"))// && (hasBall == false))
         {
                 hasBall = true;
-                //Debug.Log(this.name + " grabbed stationary ball");
+                Debug.Log(this.name + " grabbed stationary ball");
         }
         else if ((other.gameObject.tag == "Player") && (hasBall == false))
         {
@@ -266,7 +230,7 @@ public class PlayerControl : MonoBehaviour
             }
         }
         else if ((other.gameObject.tag == "Player") & (hasBall == true)){
-            stunned = true;
+            //stunCooldown = 20;
         }
         //CameraScript Shake = Camera.GetComponent<CameraShake>();
     }
@@ -279,21 +243,14 @@ public class PlayerControl : MonoBehaviour
 
         while (elapsed < duration)
         {
-            //stunCooldown -= 1;
-            //Debug.Log("Stun cooldown: " + stunCooldown);
             float x = Random.Range(-1f, 1f) * magnitude;
             //float y = Random.Range(-1f, 1f) * magnitude;
-            float z = Random.Range(-1f, 1f) * magnitude;
 
-            transform.position = new Vector3(x, transform.localPosition.y, z);
+            transform.position = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
             elapsed += Time.deltaTime;
             yield return 0;
         }
         transform.position = originalPosition;
-        stunned = false;
-        canMove = true;
-        Debug.Log("Stun over, player can move");
-        yield break;
     }
 
     //void OnTriggerEnter(Collider other)

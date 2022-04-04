@@ -46,7 +46,7 @@ public class Ball : MonoBehaviour
             {
                 cameraScript.shaking = true;
                 player2Script.hasBall = true;
-                //Debug.Log("...to player 2");
+                Debug.Log("...to player 2");
                 player1Script.hasBall = false;
                 ballTransferring = false;
             }
@@ -54,7 +54,7 @@ public class Ball : MonoBehaviour
             {
                 cameraScript.shaking = true;
                 player1Script.hasBall = true;
-                //Debug.Log("...to player 1");
+                Debug.Log("...to player 1");
                 player2Script.hasBall = false;
                 ballTransferring = false;
             }
