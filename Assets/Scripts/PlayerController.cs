@@ -92,18 +92,18 @@ public class PlayerController : MonoBehaviour
                 }
                 if ((verticalSpeed != 0) && (horizontalSpeed != 0)) //makes diagonal speed equal to runSpeed
                 {
-                    isRunning = true;
+                    //isRunning = true;
                     verticalSpeed = verticalSpeed * (1 / Mathf.Sqrt(2));
                     horizontalSpeed = horizontalSpeed * (1 / Mathf.Sqrt(2));
                 }
                 else if ((verticalSpeed != 0) || (horizontalSpeed != 0))
                 {
-                    isRunning = true;
+                    //isRunning = true;
                     this.transform.forward = new Vector3(-verticalSpeed, 0, horizontalSpeed); //looks in the direction of movement
                 }
                 else
                 {
-                    isRunning = false;
+                    //isRunning = false;
                 }
             }
             if ((Input.GetKey(lungeKey)) && (lungeCooldown == 0) && (hasBall == false))

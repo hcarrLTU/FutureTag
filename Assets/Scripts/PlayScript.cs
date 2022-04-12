@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayScript : MonoBehaviour
 {
+    public AudioClip blip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,8 @@ public class PlayScript : MonoBehaviour
 
     public void LoadScene()
     {
+        //AudioSource audioSource = GetComponent<AudioSource>();
+        //audioSource.PlayOneShot(blip, 1f);
         SceneManager.LoadScene("SampleScene");
     }
 }
