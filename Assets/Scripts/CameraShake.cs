@@ -24,7 +24,7 @@ public class CameraShake : MonoBehaviour
 
     public IEnumerator Shake(float duration, float magnitude)
     {
-        Debug.Log("Camera shaking");
+        //Debug.Log("Camera shaking");
         Vector3 originalPosition = transform.localPosition;
         float elapsed = 0f;
 

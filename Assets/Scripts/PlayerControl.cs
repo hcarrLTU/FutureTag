@@ -19,6 +19,8 @@ public class PlayerControl : MonoBehaviour
     public float pointsGained;
     public Text Player1Points;
     public Text Player2Points;
+    public RectTransform PointMeter;
+    public RectTransform LungeMeter;
     public Camera Camera;
     public GameObject PlayerMarker;
     public GameObject GameBall;
@@ -34,7 +36,7 @@ public class PlayerControl : MonoBehaviour
     private float lungeDuration = 1f;
     private float lungeCooldown = 0;
     //private Vector3 lungePoint;
-    private bool canMove;
+    public bool canMove;
     public bool isRunning;
     public bool isStunned;
     public float stunCooldown = 0;
@@ -48,11 +50,13 @@ public class PlayerControl : MonoBehaviour
     public AudioClip footstep;
     public AudioClip stun;
     public AudioClip lunge;
+    public AudioClip nearwin;
 
     // Start is called before the first frame update
     void Start()
     {
-        canMove = true;
+        canMove = false;
+        //animator.SetBool("isRunning", true);
         pointsGained = 0;
         lungeCooldown = 0;
         footstepCooldown = 0;
@@ -76,6 +80,8 @@ public class PlayerControl : MonoBehaviour
         {
             Player2Points.text = "Points: " + (pointsGained).ToString() + "/" + pointsTotal + "\nLunge cooldown: " + lungeCooldown;
         }
+        PointMeter.sizeDelta = new Vector2(1.25f, (pointsGained / pointsTotal) * 2.5f);
+        PointMeter.anchoredPosition = new Vector2(0, -1.25f + (pointsGained / pointsTotal) * 1.25f);
         Vector3 markerPosition = Camera.WorldToScreenPoint(this.transform.position);
         //Debug.Log(markerPosition.ToString());
         //markerPosition.x = markerPosition.x * 750 - 375;
@@ -113,6 +119,7 @@ public class PlayerControl : MonoBehaviour
         Vector3 newPosition = this.transform.position;
         verticalSpeed = 0;
         horizontalSpeed = 0;
+        animator.SetBool("isRunning", true);
         if (canMove == true)
         {
             //verticalInput = Input.GetAxis("Vertical");
@@ -168,10 +175,12 @@ public class PlayerControl : MonoBehaviour
                 if (!(Input.GetKey(upKey)) && !(Input.GetKey(downKey)))
                 {
                     verticalSpeed = 0;
+                    //newPosition.z = this.transform.position.z;
                 }
                 if (!(Input.GetKey(leftKey)) && !(Input.GetKey(rightKey)))
                 {
                     horizontalSpeed = 0;
+                    //newPosition.x = this.transform.position.x;
                 }
                 if ((verticalSpeed != 0) && (horizontalSpeed != 0)) //makes diagonal speed equal to runSpeed
                 {
@@ -221,6 +230,8 @@ public class PlayerControl : MonoBehaviour
             }
             if (lungeCooldown > 0)
             {
+                LungeMeter.sizeDelta = new Vector2(1.25f, ((3 - lungeCooldown) / 3) * 2.5f);
+                LungeMeter.anchoredPosition = new Vector2(0, -1.25f + ((3 - lungeCooldown) / 3) * 1.25f);
                 lungeCooldown -= Time.deltaTime;
                 //Debug.Log("Lunge cooldown: " + lungeCooldown);
             }
@@ -261,6 +272,10 @@ public class PlayerControl : MonoBehaviour
             {
                 animator.SetBool("hasBall", true);
                 pointsGained += Time.deltaTime; // change to deltaTime to get rid of inconsistency
+            if (pointsGained >= (0.9f * pointsTotal))
+            {
+                audioSource.PlayOneShot(nearwin, 0.2f);
+            }
                 if (pointsGained > pointsTotal)
                 {
                     pointsGained = pointsTotal;
@@ -273,8 +288,9 @@ public class PlayerControl : MonoBehaviour
                     //SceneManager.LoadScene("SampleScene");
                 }
             }
-            if (hasBall == false)
+            if ((hasBall == false) && (pointsGained >= (0.9f * pointsTotal)))
         {
+            pointsGained = 0.8f * pointsTotal;
             animator.SetBool("hasBall", false);
         }
         }
@@ -373,7 +389,7 @@ public class PlayerControl : MonoBehaviour
             //float y = Random.Range(-1f, 1f) * magnitude;
             float z = Random.Range(-0.1f, 0.1f) * magnitude;
 
-                transform.position = new Vector3(transform.localPosition.x + x, transform.localPosition.y, transform.localPosition.z + z);
+                //transform.position = new Vector3(transform.localPosition.x + x, transform.localPosition.y, transform.localPosition.z + z);
                 elapsed += Time.deltaTime;
                 yield return 0;
             }
@@ -381,6 +397,7 @@ public class PlayerControl : MonoBehaviour
             isStunned = false;
             canMove = true;
             animator.SetBool("isStunned", false);
+            //animator.SetBool("isRunning", true);
             //Debug.Log("Stun over, player can move");
             yield break;
         }

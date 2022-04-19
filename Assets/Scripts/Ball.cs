@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Ball : MonoBehaviour
 {
@@ -9,15 +11,25 @@ public class Ball : MonoBehaviour
     public GameObject Player3;
     public GameObject Player4;
     public Camera Camera;
+    public Text CountdownText;
+    public int countdownLength = 1;
+    public int secondsLeft = 4;
+    public float countdownCooldown;
+    public bool countdownComplete;
     public bool ballTransferring;
 
     public ParticleSystem ballParticleSystem;
 
     Collider ballCollider;
 
+    public AudioClip countdown1;
+    public AudioClip countdown2;
+
     // Start is called before the first frame update
     void Start()
     {
+        countdownCooldown = countdownLength;
+        countdownComplete = false;
         ballTransferring = false;
         ballCollider = GetComponent<Collider>();
         //Player1 = GameObject.FindWithTag("Player 1");
@@ -35,8 +47,62 @@ public class Ball : MonoBehaviour
         //PlayerControl player3Script = Player3.GetComponent<PlayerControl>();
         //PlayerControl player4Script = Player4.GetComponent<PlayerControl>();
 
+        AudioSource audioSource = GetComponent<AudioSource>();
+
         Vector3 Player1Location = Player1.transform.position;
         Vector3 Player2Location = Player2.transform.position;
+
+        //if (countdownCooldown > 0)
+        //{
+        //    countdownCooldown -= Time.deltaTime;
+        //    if ((countdownCooldown == 3 * (countdownLength) / 4) || (countdownCooldown == 2 * (countdownLength) / 4 || (countdownCooldown == (countdownLength) / 4)))
+        //    {
+        //        audioSource.PlayOneShot(countdown1, 1f);
+        //    }
+        //}
+        //else if (countdownCooldown < 0)
+        //{
+        //    countdownCooldown = 0;
+        //}
+        //else if (countdownComplete == false)
+        //{
+        //    //countdownCooldown = 0;
+        //    audioSource.PlayOneShot(countdown2, 1f);
+        //    player1Script.canMove = true;
+        //    player2Script.canMove = true;
+        //    countdownComplete = true;
+        //}
+
+        if (secondsLeft == 4)
+        {
+            CountdownText.text = 3.ToString();
+        }
+        else if (secondsLeft == 0)
+        {
+            CountdownText.text = "";
+        }
+        else
+        {
+            CountdownText.text = (secondsLeft).ToString();
+        }
+
+        if ((secondsLeft == 0) && (countdownComplete == false))
+        {
+            countdownComplete = true;
+            audioSource.PlayOneShot(countdown2, 1f);
+            player1Script.canMove = true;
+            player2Script.canMove = true;
+        }
+        else if ((countdownCooldown <= 0) && (secondsLeft != 0) && (countdownComplete == false))
+        {
+            countdownCooldown = countdownLength;
+            secondsLeft -= 1;
+            audioSource.PlayOneShot(countdown1, 1f);
+        }
+        else if ((countdownCooldown > 0) && (secondsLeft != 0) && (countdownComplete == false))
+        {
+            countdownCooldown -= Time.deltaTime;
+        }
 
         if (ballTransferring == true)
         {
