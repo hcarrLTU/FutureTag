@@ -97,6 +97,7 @@ public class PlayerControl : MonoBehaviour
         Physics.Raycast(Camera.transform.position, this.transform.position - Camera.transform.position, out hit, 1 << 7);
         //Debug.Log("SphereCast hit: " + hit.point);
         //Debug.Log("Player at: " + this.transform.position);
+        //Debug.DrawRay(this.transform.position, LungeWallCheckDirection * 3, Color.white);
 
         if (hit.transform == this.transform)
         {
@@ -319,8 +320,10 @@ public class PlayerControl : MonoBehaviour
             Vector3 lastPosition = this.transform.position;
             this.transform.position = Vector3.Lerp(startPosition, targetPosition, (t * lungeSpeed) / 2);
             //Debug.Log("Time elapsed: " + t);
-                if (Physics.Raycast(this.transform.position, this.transform.forward, lungeSpeed/2, 1 << 6 | 7)) //lungeSpeed/2 or movementRaycastLength or (targetPosition - this.transform.position).magnitude / (lungeSpeed/2)
+            Vector3 LungeWallCheckDirection = new Vector3(this.transform.forward.z, 0, -this.transform.forward.x);
+            if (Physics.Raycast(this.transform.position, LungeWallCheckDirection, 1f, 1 << 6 | 7)) //lungeSpeed/2 or movementRaycastLength or (targetPosition - this.transform.position).magnitude / (lungeSpeed/2)
             {
+                //this.transform.position = Vector3.Lerp(startPosition, targetPosition, (t * lungeSpeed) / 2);
                 targetPosition = this.transform.position;
                 Debug.Log("Reached target position early. Travelled " + (this.transform.position - lastPosition).magnitude);
             }
