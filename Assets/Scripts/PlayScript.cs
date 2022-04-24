@@ -6,10 +6,13 @@ using UnityEngine.SceneManagement;
 public class PlayScript : MonoBehaviour
 {
     public AudioClip blip;
+    public GameObject TitleScreen;
+    public GameObject ControlScreen;
 
     // Start is called before the first frame update
     void Start()
     {
+        ControlScreen.SetActive(false);
     }
 
     // Update is called once per frame
@@ -20,8 +23,10 @@ public class PlayScript : MonoBehaviour
 
     public void LoadScene()
     {
-        //AudioSource audioSource = GetComponent<AudioSource>();
+        AudioSource audioSource = GetComponent<AudioSource>();
         //audioSource.PlayOneShot(blip, 1f);
-        SceneManager.LoadScene("SampleScene");
+        //SceneManager.LoadScene("SampleScene");
+        TitleScreen.SetActive(false);
+        ControlScreen.SetActive(true);
     }
 }

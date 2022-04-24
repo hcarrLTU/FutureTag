@@ -319,7 +319,7 @@ public class PlayerControl : MonoBehaviour
             Vector3 lastPosition = this.transform.position;
             this.transform.position = Vector3.Lerp(startPosition, targetPosition, (t * lungeSpeed) / 2);
             //Debug.Log("Time elapsed: " + t);
-                if (Physics.Raycast(this.transform.position, this.transform.forward, 1f, 1 << 6 | 7)) //lungeSpeed/2 or movementRaycastLength or (targetPosition - this.transform.position).magnitude / (lungeSpeed/2)
+                if (Physics.Raycast(this.transform.position, this.transform.forward, lungeSpeed/2, 1 << 6 | 7)) //lungeSpeed/2 or movementRaycastLength or (targetPosition - this.transform.position).magnitude / (lungeSpeed/2)
             {
                 targetPosition = this.transform.position;
                 Debug.Log("Reached target position early. Travelled " + (this.transform.position - lastPosition).magnitude);
