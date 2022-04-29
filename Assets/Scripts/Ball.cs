@@ -18,9 +18,17 @@ public class Ball : MonoBehaviour
     public bool countdownComplete;
     public bool ballTransferring;
 
+    public GameObject Countdown3;
+    public GameObject Countdown2;
+    public GameObject Countdown1;
+
     public ParticleSystem ballParticleSystem;
 
+    public GameObject BallModel;
+
     Collider ballCollider;
+
+    public AudioSource musicSource;
 
     public AudioClip countdown1;
     public AudioClip countdown2;
@@ -73,13 +81,31 @@ public class Ball : MonoBehaviour
         //    countdownComplete = true;
         //}
 
-        if (secondsLeft == 4)
+        if ((secondsLeft == 4) || (secondsLeft == 3))
         {
-            CountdownText.text = 3.ToString();
+            //CountdownText.text = 3.ToString();
+            Countdown3.SetActive(true);
+            Countdown2.SetActive(false);
+            Countdown1.SetActive(false);
+        }
+        else if (secondsLeft == 2)
+        {
+            Countdown3.SetActive(false);
+            Countdown2.SetActive(true);
+            Countdown1.SetActive(false);
+        }
+        else if (secondsLeft == 1)
+        {
+            Countdown3.SetActive(false);
+            Countdown2.SetActive(false);
+            Countdown1.SetActive(true);
         }
         else if (secondsLeft == 0)
         {
-            CountdownText.text = "";
+            //CountdownText.text = "";
+            Countdown3.SetActive(false);
+            Countdown2.SetActive(false);
+            Countdown1.SetActive(false);
         }
         else
         {
@@ -90,10 +116,11 @@ public class Ball : MonoBehaviour
         {
             countdownComplete = true;
             audioSource.PlayOneShot(countdown2, 1f);
+            musicSource.Play();
             player1Script.canMove = true;
             player2Script.canMove = true;
         }
-        else if ((countdownCooldown <= 0) && (secondsLeft != 0) && (countdownComplete == false))
+        else if ((countdownCooldown < 0) && (secondsLeft != 0) && (countdownComplete == false))
         {
             countdownCooldown = countdownLength;
             secondsLeft -= 1;
@@ -129,6 +156,9 @@ public class Ball : MonoBehaviour
         if (player1Script.hasBall == true)
         {
             ballCollider.enabled = false;
+            BallModel.SetActive(false);
+            player1Script.HeldBall.SetActive(true);
+            player2Script.HeldBall.SetActive(false);
             this.transform.position = new Vector3(Player1.transform.position.x, Player1.transform.position.y + 1, Player1.transform.position.z);
             if (player2Script.hasBall == true)
             {
@@ -139,6 +169,9 @@ public class Ball : MonoBehaviour
         if (player2Script.hasBall == true)
         {
             ballCollider.enabled = false;
+            BallModel.SetActive(false);
+            player1Script.HeldBall.SetActive(false);
+            player2Script.HeldBall.SetActive(true);
             this.transform.position = new Vector3(Player2.transform.position.x, Player2.transform.position.y + 1, Player2.transform.position.z);
         }
 

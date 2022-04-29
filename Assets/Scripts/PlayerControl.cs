@@ -21,12 +21,20 @@ public class PlayerControl : MonoBehaviour
     public Text Player2Points;
     public RectTransform PointMeter;
     public RectTransform LungeMeter;
+    public RawImage PointFill;
+    public Color PointsColor;
+    public RawImage LungeFill;
     public Camera Camera;
     public GameObject PlayerMarker;
     public GameObject GameBall;
     public GameObject OtherPlayer;
+
+    public GameObject HeldBall;
+
     Animator animator;
     public static string winner;
+
+    public Rigidbody Rigidbody;
 
     public ParticleSystem lungeParticleSystem;
 
@@ -65,6 +73,8 @@ public class PlayerControl : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         ParticleSystem ps = GetComponent<ParticleSystem>();
         //AudioSource audioSource = GetComponent<AudioSource>();
+
+        PointsColor = PointFill.color;
     }
 
     // Update is called once per frame
@@ -101,11 +111,11 @@ public class PlayerControl : MonoBehaviour
 
         if (hit.transform == this.transform)
         {
-            PlayerMarker.SetActive(false);
+            //PlayerMarker.SetActive(false);
         }
         else
         {
-            PlayerMarker.SetActive(true);
+            //PlayerMarker.SetActive(true);
         }
 
         //if (Physics.SphereCast(Camera.transform.position, 1, this.transform.position - Camera.transform.position, out hit, 1 << 7))
@@ -207,6 +217,7 @@ public class PlayerControl : MonoBehaviour
                 }
                 else
                 {
+                    //Rigidbody.velocity = new Vector3(0, 0, 0);
                     animator.SetBool("isRunning", true);
                 }
             }
@@ -233,12 +244,14 @@ public class PlayerControl : MonoBehaviour
             {
                 LungeMeter.sizeDelta = new Vector2(1.25f, ((3 - lungeCooldown) / 3) * 2.5f);
                 LungeMeter.anchoredPosition = new Vector2(0, -1.25f + ((3 - lungeCooldown) / 3) * 1.25f);
+                LungeFill.color = Color.gray;
                 lungeCooldown -= Time.deltaTime;
                 //Debug.Log("Lunge cooldown: " + lungeCooldown);
             }
             else if (lungeCooldown < 0)
             {
                 lungeCooldown = 0;
+                LungeFill.color = Color.white;
             }
 
             if (isStunned == true)
@@ -255,7 +268,10 @@ public class PlayerControl : MonoBehaviour
             //    canMove = true;
             //}
         }
-            newPosition.x += horizontalSpeed;
+
+        Rigidbody.velocity = new Vector3(0, 0, 0);
+        
+        newPosition.x += horizontalSpeed;
             newPosition.z += verticalSpeed;
             //newPosition = new Vector3(horizontalInput, 0, verticalInput);
             this.transform.position = newPosition;
@@ -275,7 +291,8 @@ public class PlayerControl : MonoBehaviour
                 pointsGained += Time.deltaTime; // change to deltaTime to get rid of inconsistency
             if (pointsGained >= (0.9f * pointsTotal))
             {
-                audioSource.PlayOneShot(nearwin, 0.2f);
+                //audioSource.PlayOneShot(nearwin, 0.2f);
+                PointFill.color = Color.green;
             }
                 if (pointsGained > pointsTotal)
                 {
@@ -292,6 +309,7 @@ public class PlayerControl : MonoBehaviour
             if ((hasBall == false) && (pointsGained >= (0.9f * pointsTotal)))
         {
             pointsGained = 0.8f * pointsTotal;
+            PointFill.color = PointsColor;
             animator.SetBool("hasBall", false);
         }
         }
@@ -378,6 +396,7 @@ public class PlayerControl : MonoBehaviour
 
         public IEnumerator Shake(float duration, float magnitude)
         {
+        animator.SetBool("hasBall", false);
         AudioSource audioSource = GetComponent<AudioSource>();
         audioSource.PlayOneShot(stun, 1f);
         animator.SetBool("isStunned", true);

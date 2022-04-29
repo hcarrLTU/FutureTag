@@ -5,14 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class PlayScript : MonoBehaviour
 {
-    public AudioClip blip;
+    public AudioSource audioSource;
+    public AudioClip forward;
+    public AudioClip backward;
     public GameObject TitleScreen;
     public GameObject ControlScreen;
+    public GameObject CreditsScreen;
 
     // Start is called before the first frame update
     void Start()
     {
         ControlScreen.SetActive(false);
+        //CreditsScreen.SetActive(false);
+        //audioSource.PlayOneShot(forward, 1f);
     }
 
     // Update is called once per frame
@@ -23,10 +28,28 @@ public class PlayScript : MonoBehaviour
 
     public void LoadScene()
     {
-        AudioSource audioSource = GetComponent<AudioSource>();
-        //audioSource.PlayOneShot(blip, 1f);
+        audioSource.PlayOneShot(forward, 1f);
         //SceneManager.LoadScene("SampleScene");
-        TitleScreen.SetActive(false);
         ControlScreen.SetActive(true);
+        TitleScreen.SetActive(false);
+    }
+
+    public void Credits()
+    {
+        audioSource.PlayOneShot(forward, 1f);
+        CreditsScreen.SetActive(true);
+        TitleScreen.SetActive(false);
+    }
+
+    public void BackToMenu()
+    {
+        audioSource.PlayOneShot(backward, 1f);
+        TitleScreen.SetActive(true);
+        CreditsScreen.SetActive(false);
+    }
+
+    public void SwitchToMenuScene()
+    {
+        SceneManager.LoadScene("Title Screen");
     }
 }

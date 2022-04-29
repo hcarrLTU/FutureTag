@@ -10,11 +10,26 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(pauseKey))
-        {
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0f;
+        //if (Input.GetKey(pauseKey))
+        //{
+        //    pauseMenu.SetActive(true);
+        //    Time.timeScale = 0f;
 
+        //}
+        bool changing = false;
+        if ((Input.GetMouseButtonDown(0)))
+        {
+            if (pauseMenu.activeSelf == false)
+            {
+                pauseMenu.SetActive(true);
+                Time.timeScale = 0f;
+                changing = true;
+            }
+            else if ((pauseMenu.activeSelf == true) && (changing == false))
+            {
+                pauseMenu.SetActive(false);
+                Time.timeScale = 1f;
+            }
         }
 
     }
